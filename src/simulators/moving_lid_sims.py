@@ -52,6 +52,30 @@ def pressure_poisson(p, dx, dy, b):
     return p
 
 def cavity_flow(nt, u, v, dt, dx, dy, p, rho, nu):
+    """
+    Simulates the flow in a cavity using the Navier-Stokes equations.
+    Parameters:
+    - nt (int): Number of time steps.
+    - u (ndarray): Array representing the x-component of velocity.
+    - v (ndarray): Array representing the y-component of velocity.
+    - dt (float): Time step size.
+    - dx (float): Grid spacing in the x-direction.
+    - dy (float): Grid spacing in the y-direction.
+    - p (ndarray): Array representing the pressure.
+    - rho (float): Density of the fluid.
+    - nu (float): Kinematic viscosity of the fluid.
+    Returns:
+    - u (ndarray): Updated array representing the x-component of velocity.
+    - v (ndarray): Updated array representing the y-component of velocity.
+    - p (ndarray): Updated array representing the pressure.
+    - cavity_flow_data (dict): Dictionary containing the simulation data at each time step.
+        - 't' (list): List of time values.
+        - 'x' (list): List of x-coordinates.
+        - 'y' (list): List of y-coordinates.
+        - 'u' (list): List of x-component of velocity values.
+        - 'v' (list): List of y-component of velocity values.
+        - 'p' (list): List of pressure values.
+    """
     # Initialize lists to store data
     cavity_flow_data = {
         't': [],
