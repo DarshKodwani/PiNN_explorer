@@ -26,6 +26,21 @@ u[-1, :] = lid_velocity
 
 # Functions for pressure Poisson equation and velocity update
 def build_up_b(b, rho, dt, u, v, dx, dy):
+    """
+    Calculates the build-up term for the pressure Poisson equation.
+
+    Parameters:
+    - b (ndarray): Array representing the build-up term.
+    - rho (float): Density.
+    - dt (float): Time step.
+    - u (ndarray): Array representing the x-velocity component.
+    - v (ndarray): Array representing the y-velocity component.
+    - dx (float): Grid spacing in the x-direction.
+    - dy (float): Grid spacing in the y-direction.
+
+    Returns:
+    - b (ndarray): Updated array representing the build-up term.
+    """
     b[1:-1, 1:-1] = (rho * (1 / dt * 
                 ((u[1:-1, 2:] - u[1:-1, :-2]) / (2 * dx) + 
                  (v[2:, 1:-1] - v[:-2, 1:-1]) / (2 * dy)) -
@@ -36,6 +51,16 @@ def build_up_b(b, rho, dt, u, v, dx, dy):
     return b
 
 def pressure_poisson(p, dx, dy, b):
+    """
+    Solve the pressure Poisson equation for a given pressure field.
+    Parameters:
+    - p (numpy.ndarray): The pressure field.
+    - dx (float): The grid spacing in the x-direction.
+    - dy (float): The grid spacing in the y-direction.
+    - b (numpy.ndarray): The source term.
+    Returns:
+    - p (numpy.ndarray): The updated pressure field after solving the pressure Poisson equation.
+    """
     pn = np.empty_like(p)
     for q in range(nt):
         pn = p.copy()
