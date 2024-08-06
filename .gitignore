@@ -1,2 +1,2 @@
 venv
-src/simulator/__pycache__
+__pycache__/
