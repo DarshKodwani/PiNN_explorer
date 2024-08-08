@@ -109,11 +109,6 @@ def plot_results(p, u, v, Lx, Ly, nx, ny, save_path=None):
         plt.savefig(save_path)
     plt.show()
 
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-import numpy as np
-
 def save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, save_path):
     # Convert cavity_flow_data to a DataFrame if it is not already one
     if not isinstance(cavity_flow_data, pd.DataFrame):
