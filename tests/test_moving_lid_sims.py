@@ -5,9 +5,6 @@ import os
 # Add the directory containing moving_lid_sims.py to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src/simulators')))
 from moving_lid_sims import pressure_poisson
-import unittest
-import numpy as np
-from moving_lid_sims import pressure_poisson
 
 class TestMovingLidSims(unittest.TestCase):
 
