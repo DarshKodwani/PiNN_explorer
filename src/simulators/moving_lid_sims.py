@@ -5,6 +5,19 @@ import matplotlib.animation as animation
 from matplotlib.animation import FuncAnimation
 
 def pressure_poisson(p, dx, dy, b, nit):
+    """
+    Solves the pressure Poisson equation for a given pressure field.
+
+    Parameters:
+    p (numpy.ndarray): The initial pressure field, a 2D array.
+    dx (float): The grid spacing in the x-direction.
+    dy (float): The grid spacing in the y-direction.
+    b (numpy.ndarray): The source term, a 2D array of the same shape as p.
+    nit (int): The number of iterations to perform.
+
+    Returns:
+    numpy.ndarray: The updated pressure field after solving the Poisson equation.
+    """
     pn = np.empty_like(p)
     for q in range(nit):
         pn = p.copy()
