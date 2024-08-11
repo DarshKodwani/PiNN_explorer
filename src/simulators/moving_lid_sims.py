@@ -136,6 +136,16 @@ def run_simulation(nt, u, v, dt, dx, dy, p, rho, nu, nit):
     return u, v, p, cavity_flow_data
 
 def save_data(cavity_flow_data, file_path):
+    """
+    Save the cavity flow data to a CSV file.
+
+    Parameters:
+    - cavity_flow_data (list): List of dictionaries containing the cavity flow data.
+    - file_path (str): The file path where the data will be saved.
+
+    Returns:
+    None
+    """
     df = pd.DataFrame(cavity_flow_data)
     df.to_csv(file_path, index=False)
 
