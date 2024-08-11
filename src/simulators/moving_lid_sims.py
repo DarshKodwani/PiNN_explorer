@@ -34,6 +34,23 @@ def pressure_poisson(p, dx, dy, b, nit):
     return p
 
 def velocity_update(u, v, dt, dx, dy, p, rho, nu):
+    """
+    Updates the velocity fields (u, v) for a fluid simulation based on the 
+    Navier-Stokes equations.
+
+    Parameters:
+    u (numpy.ndarray): The velocity field in the x-direction, a 2D array.
+    v (numpy.ndarray): The velocity field in the y-direction, a 2D array.
+    dt (float): The time step size.
+    dx (float): The grid spacing in the x-direction.
+    dy (float): The grid spacing in the y-direction.
+    p (numpy.ndarray): The pressure field, a 2D array.
+    rho (float): The density of the fluid.
+    nu (float): The kinematic viscosity of the fluid.
+
+    Returns:
+    tuple: A tuple containing the updated velocity fields (u, v).
+    """
     un = u.copy()
     vn = v.copy()
     
