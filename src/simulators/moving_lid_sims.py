@@ -182,6 +182,25 @@ def plot_results(p, u, v, Lx, Ly, nx, ny, save_path=None):
     plt.show()
 
 def save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, save_path):
+    """
+    Save an animation of the cavity flow velocity field.
+    Parameters:
+    - u (numpy.ndarray): Array of x-velocity values.
+    - v (numpy.ndarray): Array of y-velocity values.
+    - p (numpy.ndarray): Array of pressure values.
+    - Lx (float): Length of the x-axis.
+    - Ly (float): Length of the y-axis.
+    - nx (int): Number of grid points along the x-axis.
+    - ny (int): Number of grid points along the y-axis.
+    - dt (float): Time step size.
+    - nt (int): Number of time steps.
+    - cavity_flow_data (pandas.DataFrame): Dataframe containing cavity flow data.
+    - save_path (str): Path to save the animation.
+    Raises:
+    - ValueError: If cavity_flow_data cannot be converted to a DataFrame.
+    Returns:
+    - None
+    """
     # Convert cavity_flow_data to a DataFrame if it is not already one
     if not isinstance(cavity_flow_data, pd.DataFrame):
         try:
