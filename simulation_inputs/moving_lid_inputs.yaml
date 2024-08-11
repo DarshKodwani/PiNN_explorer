@@ -1,0 +1,35 @@
+# Number of grid points in the x-direction
+nx: 41
+
+# Number of grid points in the y-direction
+ny: 41
+
+# Number of time steps to run the simulation
+nt: 500
+
+# Number of iterations for the pressure Poisson equation
+nit: 50
+
+# Length of the domain in the x-direction
+Lx: 2.0
+
+# Length of the domain in the y-direction
+Ly: 2.0
+
+# Grid spacing in the x-direction. Calculated as Lx / (nx - 1)
+dx: 0.05
+
+# Grid spacing in the y-direction. Calculated as Ly / (ny - 1)
+dy: 0.05
+
+# Density of the fluid
+rho: 1.0
+
+# Kinematic viscosity of the fluid
+nu: 0.1
+
+# Time step size
+dt: 0.001
+
+# Path to save the output folder
+output_dir: "moving_lid_simulation"
