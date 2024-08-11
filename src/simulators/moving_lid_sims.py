@@ -150,6 +150,20 @@ def save_data(cavity_flow_data, file_path):
     df.to_csv(file_path, index=False)
 
 def plot_results(p, u, v, Lx, Ly, nx, ny, save_path=None):
+    """
+    Plot the results of a simulation.
+    Parameters:
+    - p (numpy.ndarray): Pressure field.
+    - u (numpy.ndarray): x-component of velocity field.
+    - v (numpy.ndarray): y-component of velocity field.
+    - Lx (float): Length of the domain in the x-direction.
+    - Ly (float): Length of the domain in the y-direction.
+    - nx (int): Number of grid points in the x-direction.
+    - ny (int): Number of grid points in the y-direction.
+    - save_path (str, optional): Path to save the plot. If not provided, the plot will be displayed.
+    Returns:
+    None
+    """
     plt.figure(figsize=(11, 7), dpi=100)
     
     # Contour plot for pressure field
