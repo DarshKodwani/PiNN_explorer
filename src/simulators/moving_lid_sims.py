@@ -1,8 +1,14 @@
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.animation import FuncAnimation
+
+
+def check_output_dir(output_dir):
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
 def pressure_poisson(p, dx, dy, b, nit):
     """
@@ -135,21 +141,22 @@ def run_simulation(nt, u, v, dt, dx, dy, p, rho, nu, nit):
     
     return u, v, p, cavity_flow_data
 
-def save_data(cavity_flow_data, file_path):
+def save_data(cavity_flow_data, output_dir):
     """
     Save the cavity flow data to a CSV file.
 
     Parameters:
     - cavity_flow_data (list): List of dictionaries containing the cavity flow data.
-    - file_path (str): The file path where the data will be saved.
+    - output_dir (str): Path to output directory.
 
     Returns:
     None
     """
+    
     df = pd.DataFrame(cavity_flow_data)
-    df.to_csv(file_path, index=False)
+    df.to_csv(os.path.join(output_dir, "flow_data.csv"), index=False)
 
-def plot_results(p, u, v, Lx, Ly, nx, ny, save_path=None):
+def plot_results(p, u, v, Lx, Ly, nx, ny, output_dir):
     """
     Plot the results of a simulation.
     Parameters:
@@ -160,7 +167,7 @@ def plot_results(p, u, v, Lx, Ly, nx, ny, save_path=None):
     - Ly (float): Length of the domain in the y-direction.
     - nx (int): Number of grid points in the x-direction.
     - ny (int): Number of grid points in the y-direction.
-    - save_path (str, optional): Path to save the plot. If not provided, the plot will be displayed.
+    - output_dir (str): Path to output directory.
     Returns:
     None
     """
@@ -177,11 +184,10 @@ def plot_results(p, u, v, Lx, Ly, nx, ny, save_path=None):
     # Quiver plot for velocity field
     plt.quiver(np.linspace(0, Lx, nx), np.linspace(0, Ly, ny), u, v, color='r')
     
-    if save_path:
-        plt.savefig(save_path)
-    plt.show()
+    if output_dir:
+        plt.savefig(os.path.join(output_dir, "flow_plot.png"))
 
-def save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, save_path):
+def save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, output_dir):
     """
     Save an animation of the cavity flow velocity field.
     Parameters:
@@ -195,7 +201,7 @@ def save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, save_path)
     - dt (float): Time step size.
     - nt (int): Number of time steps.
     - cavity_flow_data (pandas.DataFrame): Dataframe containing cavity flow data.
-    - save_path (str): Path to save the animation.
+    - output_dir (str): Path to output directory.
     Raises:
     - ValueError: If cavity_flow_data cannot be converted to a DataFrame.
     Returns:
@@ -229,28 +235,42 @@ def save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, save_path)
         ax.set_title(f'Cavity Flow Velocity Field at t={frame * dt:.3f}s')
 
     ani = FuncAnimation(fig, update, frames=nt, repeat=False)
-    ani.save(save_path, writer='ffmpeg')
+    ani.save(os.path.join(output_dir, "flow_animation.mp4"), writer='ffmpeg')
     plt.close(fig)
 
 if __name__ == "__main__":
-    # Suggested parameters for running the simulation
-    nx = 41
-    ny = 41
-    nt = 500
-    nit = 50
-    Lx = 2.0
-    Ly = 2.0
-    dx = Lx / (nx - 1)
-    dy = Ly / (ny - 1)
-    rho = 1.0
-    nu = 0.1
-    dt = 0.001
+    # Load environment variables from the .env file
+    from dotenv import load_dotenv
+    load_dotenv()
+
+    # Get the base directory from the environment variable
+    BASE_DIR = os.getenv('BASE_DIR')
+
+    # Load the input parameters for the simulation
+    import yaml
+    with open(os.path.join(BASE_DIR, 'simulation_inputs/moving_lid_inputs.yaml'), 'r') as file:
+        moving_lid_inputs = yaml.safe_load(file)
+
+    # Parameters for running the simulation
+    nx = moving_lid_inputs['nx']
+    ny = moving_lid_inputs['ny']
+    nt = moving_lid_inputs['nt']
+    nit = moving_lid_inputs['nit']
+    Lx = moving_lid_inputs['Lx']
+    Ly = moving_lid_inputs['Ly']
+    dx = moving_lid_inputs['dx']
+    dy = moving_lid_inputs['dy']
+    rho = moving_lid_inputs['rho']
+    nu = moving_lid_inputs['nu']
+    dt = moving_lid_inputs['dt']
+    output_dir = os.path.join(BASE_DIR, "simulation_inputs", moving_lid_inputs['output_dir'])
 
     u = np.zeros((ny, nx))
     v = np.zeros((ny, nx))
     p = np.zeros((ny, nx))
 
     u, v, p, cavity_flow_data = run_simulation(nt, u, v, dt, dx, dy, p, rho, nu, nit)
-    save_data(cavity_flow_data, '../../simulation_data/cavity_flow_data.csv')
-    plot_results(p, u, v, Lx, Ly, nx, ny, save_path='../../simulation_data/cavity_flow_plot.png')
-    save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, save_path='../../simulation_data/cavity_flow_animation.mp4')
+    check_output_dir(output_dir)
+    save_data(cavity_flow_data, output_dir)
+    plot_results(p, u, v, Lx, Ly, nx, ny, output_dir)
+    save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, output_dir)
