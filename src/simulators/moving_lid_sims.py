@@ -89,6 +89,24 @@ def velocity_update(u, v, dt, dx, dy, p, rho, nu):
     return u, v
 
 def run_simulation(nt, u, v, dt, dx, dy, p, rho, nu, nit):
+    """
+    Runs the fluid simulation for a specified number of time steps.
+
+    Parameters:
+    nt (int): The number of time steps to run the simulation.
+    u (numpy.ndarray): The initial velocity field in the x-direction, a 2D array.
+    v (numpy.ndarray): The initial velocity field in the y-direction, a 2D array.
+    dt (float): The time step size.
+    dx (float): The grid spacing in the x-direction.
+    dy (float): The grid spacing in the y-direction.
+    p (numpy.ndarray): The initial pressure field, a 2D array.
+    rho (float): The density of the fluid.
+    nu (float): The kinematic viscosity of the fluid.
+    nit (int): The number of iterations for the pressure Poisson equation.
+
+    Returns:
+    tuple: A tuple containing the updated velocity fields (u, v) and pressure field (p).
+    """
     ny, nx = u.shape
     cavity_flow_data = {'t': [], 'x': [], 'y': [], 'u': [], 'v': [], 'p': []}
     
