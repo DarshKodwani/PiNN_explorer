@@ -3,3 +3,4 @@ numpy
 matplotlib
 python-dotenv
 pyyaml
+azureml-core
