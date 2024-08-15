@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.animation import FuncAnimation
+from tqdm import tqdm
 
 
 def check_output_dir(output_dir):
@@ -116,7 +117,7 @@ def run_simulation(nt, u, v, dt, dx, dy, p, rho, nu, nit):
     ny, nx = u.shape
     cavity_flow_data = {'t': [], 'x': [], 'y': [], 'u': [], 'v': [], 'p': []}
     
-    for n in range(nt):
+    for n in tqdm(range(nt), desc=Fore.CYAN + "Running Moving Lid Simulation" + Style.RESET_ALL, bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"):
         b = np.zeros_like(p)
         b[1:-1, 1:-1] = (rho * (1 / dt *
                     ((u[1:-1, 2:] - u[1:-1, :-2]) / (2 * dx) +
@@ -242,6 +243,10 @@ if __name__ == "__main__":
     # Load environment variables from the .env file
     from dotenv import load_dotenv
     load_dotenv()
+    from colorama import Fore, Style, init
+
+    # Initialize colorama
+    init()
 
     # Get the base directory from the environment variable
     BASE_DIR = os.getenv('BASE_DIR')
@@ -270,7 +275,13 @@ if __name__ == "__main__":
     p = np.zeros((ny, nx))
 
     u, v, p, cavity_flow_data = run_simulation(nt, u, v, dt, dx, dy, p, rho, nu, nit)
+    print("Simulation complete.")
     check_output_dir(output_dir)
+    print("Saving data and plotting results...")
     save_data(cavity_flow_data, output_dir)
+    print("Data saved.")
     plot_results(p, u, v, Lx, Ly, nx, ny, output_dir)
+    print("Results plotted.")
+    print("Saving animation...")
     save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, output_dir)
+    print("Animation saved.")
