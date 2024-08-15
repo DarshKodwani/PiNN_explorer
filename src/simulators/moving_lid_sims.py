@@ -263,7 +263,7 @@ if __name__ == "__main__":
     rho = moving_lid_inputs['rho']
     nu = moving_lid_inputs['nu']
     dt = moving_lid_inputs['dt']
-    output_dir = os.path.join(BASE_DIR, "simulation_inputs", moving_lid_inputs['output_dir'])
+    output_dir = os.path.join(BASE_DIR, "simulation_outputs", moving_lid_inputs['output_dir'])
 
     u = np.zeros((ny, nx))
     v = np.zeros((ny, nx))
