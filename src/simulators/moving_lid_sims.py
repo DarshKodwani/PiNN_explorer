@@ -6,6 +6,14 @@ import matplotlib.animation as animation
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm
 
+def print_decorative_message(message):
+    """
+    Prints a decorative message with Unicode characters.
+
+    Parameters:
+    message (str): The message to print.
+    """
+    print(f"✨✨✨ {message} ✨✨✨")
 
 def check_output_dir(output_dir):
     if not os.path.exists(output_dir):
@@ -275,13 +283,13 @@ if __name__ == "__main__":
     p = np.zeros((ny, nx))
 
     u, v, p, cavity_flow_data = run_simulation(nt, u, v, dt, dx, dy, p, rho, nu, nit)
-    print("Simulation complete.")
+    print_decorative_message("Simulation complete.")
     check_output_dir(output_dir)
-    print("Saving data and plotting results...")
+    print_decorative_message("Saving data and plotting results...")
     save_data(cavity_flow_data, output_dir)
-    print("Data saved.")
+    print_decorative_message("Data saved.")
     plot_results(p, u, v, Lx, Ly, nx, ny, output_dir)
-    print("Results plotted.")
-    print("Saving animation...")
+    print_decorative_message("Results plotted.")
+    print_decorative_message("Saving animation...")
     save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, output_dir)
-    print("Animation saved.")
+    print_decorative_message("Animation saved.")
