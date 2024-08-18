@@ -7,13 +7,8 @@ from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.storage import StorageManagementClient
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 
-# Configure logging
-#logging.basicConfig(level=logging.INFO)
-#logger = logging.getLogger(__name__)
-
 # Prompt for Azure configuration
-#subscription_id = input("Enter your Azure subscription ID: ")
-subscription_id = "6c62fe3c-2b26-49db-b401-ca32de9291ec"
+subscription_id = input("Enter your Azure subscription ID: ")
 resource_group_name = input("Enter your Azure resource group name: ")
 location = input("Enter your Azure location (e.g., eastus): ")
 storage_account_name = input("Enter your Azure storage account name: ")
