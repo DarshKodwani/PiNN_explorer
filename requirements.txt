@@ -4,5 +4,7 @@ matplotlib
 python-dotenv
 pyyaml
 azureml-core
+azure-identity
+azure-storage-blob
 colorama
 tqdm
