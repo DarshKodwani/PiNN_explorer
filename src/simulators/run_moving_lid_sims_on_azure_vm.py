@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+import yaml
 import subprocess
 import logging
 from azure.identity import DefaultAzureCredential
@@ -13,20 +14,26 @@ from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute.models import VirtualMachine, HardwareProfile, StorageProfile, OSProfile, NetworkProfile, ImageReference, LinuxConfiguration, SshConfiguration, SshPublicKey
 from azure.mgmt.storage import StorageManagementClient
 
+# Load environment variables
+load_dotenv('.env')
+
+# Load configuration from YAML file
+base_dir = os.getenv("BASE_DIR")
+with open(os.path.join(base_dir, 'azure_inputs/az_run_on_vm.yaml'), 'r') as file:
+    config = yaml.safe_load(file)
+
+subscription_id = os.getenv("AZURE_SUBSCRIPTION_ID")
+resource_group_name = config['azure']['resource_group_name']
+location = config['azure']['location']
+storage_account_name = config['azure']['storage_account_name']
+container_name = config['azure']['container_name']
+vm_name = config['azure']['vm_name']
+admin_username = config['azure']['admin_username']
+admin_password = config['azure']['admin_password']
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Prompt for Azure configuration
-load_dotenv('.env')
-subscription_id = os.getenv("AZURE_SUBSCRIPTION_ID")
-resource_group_name = input("Enter your Azure resource group name: ")
-location = input("Enter your Azure location (e.g., eastus): ")
-storage_account_name = input("Enter your Azure storage account name: ")
-container_name = input("Enter your Azure container name: ")
-vm_name = input("Enter your Azure VM name: ")
-admin_username = input("Enter the admin username for the VM: ")
-admin_password = input("Enter the admin password for the VM: ")
 
 # Azure Storage account details
 AZURE_STORAGE_CONNECTION_STRING = None
