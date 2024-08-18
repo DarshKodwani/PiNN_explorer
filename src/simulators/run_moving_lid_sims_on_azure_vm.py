@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import subprocess
 import logging
 from azure.identity import DefaultAzureCredential
@@ -10,13 +11,15 @@ from azure.mgmt.network.models import NetworkSecurityGroup, SecurityRule, Networ
 from azure.storage.blob import BlobServiceClient
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute.models import VirtualMachine, HardwareProfile, StorageProfile, OSProfile, NetworkProfile, ImageReference, LinuxConfiguration, SshConfiguration, SshPublicKey
+from azure.mgmt.storage import StorageManagementClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Prompt for Azure configuration
-subscription_id = input("Enter your Azure subscription ID: ")
+load_dotenv('.env')
+subscription_id = os.getenv("AZURE_SUBSCRIPTION_ID")
 resource_group_name = input("Enter your Azure resource group name: ")
 location = input("Enter your Azure location (e.g., eastus): ")
 storage_account_name = input("Enter your Azure storage account name: ")
