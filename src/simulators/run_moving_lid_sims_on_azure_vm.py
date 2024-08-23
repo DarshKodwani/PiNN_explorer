@@ -22,7 +22,7 @@ base_dir = os.getenv("BASE_DIR")
 with open(os.path.join(base_dir, 'azure_inputs/az_run_on_vm.yaml'), 'r') as file:
     config = yaml.safe_load(file)
 
-subscription_id = os.getenv("AZURE_SUBSCRIPTION_ID")
+subscription_id = os.getenv("subscription_id")
 resource_group_name = config['azure']['resource_group_name']
 location = config['azure']['location']
 storage_account_name = config['azure']['storage_account_name']
