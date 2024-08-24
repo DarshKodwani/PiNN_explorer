@@ -9,7 +9,7 @@ from azure.mgmt.storage import StorageManagementClient
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 
 # Prompt for Azure configuration
-load_dotenv('.env')
+load_dotenv(".env")
 subscription_id = os.getenv("AZURE_SUBSCRIPTION_ID")
 resource_group_name = input("Enter your Azure resource group name: ")
 location = input("Enter your Azure location (e.g., eastus): ")
