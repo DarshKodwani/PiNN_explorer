@@ -92,3 +92,7 @@ for epoch in range(epochs):
         print(f"Epoch {epoch}, Loss: {loss.item()}")
 
 print("Training complete.")
+
+# Save the model
+torch.save(model.state_dict(), 'pinn_model.pth')
+print("Model saved as pinn_model.pth")
