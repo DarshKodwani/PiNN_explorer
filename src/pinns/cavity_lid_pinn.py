@@ -3,16 +3,17 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 import pandas as pd
+import os
 
 BASE_DIR = os.getenv('BASE_DIR')
 # Load data from CSV
-data = pd.read_csv(os.path.join(BASE_DIR, 'simulation_outputs/flow_data.csv'))
-x_train = torch.tensor(data['x'].values, dtype=torch.float32).view(-1, 1)
-y_train = torch.tensor(data['y'].values, dtype=torch.float32).view(-1, 1)
-t_train = torch.tensor(data['t'].values, dtype=torch.float32).view(-1, 1)
-u_train = torch.tensor(data['u'].values, dtype=torch.float32).view(-1, 1)
-v_train = torch.tensor(data['v'].values, dtype=torch.float32).view(-1, 1)
-p_train = torch.tensor(data['p'].values, dtype=torch.float32).view(-1, 1)
+data = pd.read_csv(os.path.join(BASE_DIR, 'simulation_outputs/moving_lid_simulation/flow_data.csv'))
+x_train = torch.tensor(data['x'].values, dtype=torch.float32).view(-1, 1).requires_grad_(True)
+y_train = torch.tensor(data['y'].values, dtype=torch.float32).view(-1, 1).requires_grad_(True)
+t_train = torch.tensor(data['t'].values, dtype=torch.float32).view(-1, 1).requires_grad_(True)
+u_train = torch.tensor(data['u'].values, dtype=torch.float32).view(-1, 1).requires_grad_(True)
+v_train = torch.tensor(data['v'].values, dtype=torch.float32).view(-1, 1).requires_grad_(True)    
+p_train = torch.tensor(data['p'].values, dtype=torch.float32).view(-1, 1).requires_grad_(True)
 
 # Define the neural network model
 class PINN(nn.Module):
