@@ -80,7 +80,7 @@ model = PINN(layers)
 optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
 # Training loop
-epochs = 10000
+epochs = 50
 for epoch in range(epochs):
     optimizer.zero_grad()
     
@@ -88,8 +88,7 @@ for epoch in range(epochs):
     loss.backward()
     optimizer.step()
     
-    if epoch % 100 == 0:
-        print(f"Epoch {epoch}, Loss: {loss.item()}")
+    print(f"Epoch {epoch}, Loss: {loss.item()}")
 
 print("Training complete.")
 
