@@ -1,4 +1,16 @@
-
+pandas
+numpy
+matplotlib
+python-dotenv
 fastapi
 uvicorn
 pyyaml
+azureml-core
+azure-identity
+azure-storage-blob
+azure-mgmt-compute
+azure-mgmt-resource
+azure-mgmt-network
+azure-mgmt-storage
+colorama
+tqdm
