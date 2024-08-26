@@ -35,3 +35,19 @@ async def download_csv(file_path: str):
         return FileResponse(file_path, media_type='text/csv', filename=os.path.basename(file_path))
     else:
         raise HTTPException(status_code=404, detail="File not found")
+
+#Endpoint to download the generated plot file
+@app.get("/download-plot/")
+async def download_plot(file_path: str):
+    if os.path.exists(file_path):
+        return FileResponse(file_path, media_type='image/png', filename=os.path.basename(file_path))
+    else:
+        raise HTTPException(status_code=404, detail="File not found")
+
+#Endpoint to download the generated animation file
+@app.get("/download-animation/")
+async def download_animation(file_path: str):
+    if os.path.exists(file_path):
+        return FileResponse(file_path, media_type='video/mp4', filename=os.path.basename(file_path))
+    else:
+        raise HTTPException(status_code=404, detail="File not found")
