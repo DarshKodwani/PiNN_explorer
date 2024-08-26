@@ -5,6 +5,11 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm
+from dotenv import load_dotenv
+from colorama import Fore, Style, init
+
+load_dotenv()
+
 
 def print_decorative_message(message):
     """
@@ -268,7 +273,7 @@ def moving_lid_sim_runner(inputs_yaml):
     rho = inputs_yaml['rho']
     nu = inputs_yaml['nu']
     dt = inputs_yaml['dt']
-    output_dir = os.path.join(BASE_DIR, "simulation_outputs", inputs_yaml['output_dir'])
+    output_dir = os.path.join(os.getenv("BASE_DIR"), "simulation_outputs", inputs_yaml['output_dir'])
 
     u = np.zeros((ny, nx))
     v = np.zeros((ny, nx))
@@ -286,7 +291,11 @@ def moving_lid_sim_runner(inputs_yaml):
     save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, output_dir)
     print_decorative_message(Fore.GREEN + "Animation saved." + Style.RESET_ALL)
 
+    csv_file_path = os.path.join(output_dir, "flow_data.csv")
+    plot_file_path = os.path.join(output_dir, "flow_plot.png")
+    animation_file_path = os.path.join(output_dir, "flow_animation.mp4")
 
+    return csv_file_path, plot_file_path, animation_file_path
 
 if __name__ == "__main__":
     # Load environment variables from the .env file
