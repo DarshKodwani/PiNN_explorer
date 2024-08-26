@@ -4,6 +4,8 @@ import yaml
 import os
 from dotenv import load_dotenv
 from pydantic import BaseModel
+from src.simulators.moving_lid_sims import moving_lid_sim_runner
+from fastapi.responses import FileResponse
 
 app = FastAPI()
 
@@ -20,8 +22,16 @@ async def run_simulation(file: UploadFile = File(...)):
         yaml_content = yaml.safe_load(content)
         
         # Run the cavity_lid_simulations function with the parsed YAML content
-        simulation_result = cavity_lid_simulations(yaml_content)
+        csv_file, plot_file, animation_file = moving_lid_sim_runner(yaml_content)
         
-        return {"simulation_result": simulation_result}
+        return {"csv_path": csv_file, "plot_path": plot_file, "animation_path": animation_file}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+#Endpoint to download the generated csv file
+@app.get("/download-csv/")
+async def download_csv(file_path: str):
+    if os.path.exists(file_path):
+        return FileResponse(file_path, media_type='text/csv', filename=os.path.basename(file_path))
+    else:
+        raise HTTPException(status_code=404, detail="File not found")
