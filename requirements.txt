@@ -14,3 +14,4 @@ azure-mgmt-network
 azure-mgmt-storage
 colorama
 tqdm
+python-multipart
