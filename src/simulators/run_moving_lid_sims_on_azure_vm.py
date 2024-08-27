@@ -257,8 +257,6 @@ def azure_vm_runner(base_dir, inputs, subscription_id):
     download_results_from_vm(public_ip.ip_address, admin_username)
     upload_results_to_azure("simulation_outputs", container_name)    
 
-
-        
 if __name__ == "__main__":
 
     # Load environment variables
