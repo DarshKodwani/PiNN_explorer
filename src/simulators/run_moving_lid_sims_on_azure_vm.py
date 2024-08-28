@@ -6,12 +6,10 @@ import logging
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.compute import ComputeManagementClient
-from azure.mgmt.compute.models import DiskCreateOption
+from azure.mgmt.compute.models import DiskCreateOption, VirtualMachine, HardwareProfile, StorageProfile, OSProfile, NetworkProfile, ImageReference, LinuxConfiguration, SshConfiguration, SshPublicKey
 from azure.mgmt.network import NetworkManagementClient
-from azure.mgmt.network.models import NetworkSecurityGroup, SecurityRule, NetworkInterface, NetworkInterfaceIPConfiguration, PublicIPAddress, VirtualNetwork, Subnet, NetworkSecurityGroup
+from azure.mgmt.network.models import NetworkSecurityGroup, SecurityRule, NetworkInterface, NetworkInterfaceIPConfiguration, PublicIPAddress, VirtualNetwork, Subnet
 from azure.storage.blob import BlobServiceClient
-from azure.common.credentials import ServicePrincipalCredentials
-from azure.mgmt.compute.models import VirtualMachine, HardwareProfile, StorageProfile, OSProfile, NetworkProfile, ImageReference, LinuxConfiguration, SshConfiguration, SshPublicKey
 from azure.mgmt.storage import StorageManagementClient
 
 # Configure logging
