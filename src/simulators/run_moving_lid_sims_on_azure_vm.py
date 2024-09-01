@@ -6,12 +6,10 @@ import logging
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.compute import ComputeManagementClient
-from azure.mgmt.compute.models import DiskCreateOption
+from azure.mgmt.compute.models import DiskCreateOption, VirtualMachine, HardwareProfile, StorageProfile, OSProfile, NetworkProfile, ImageReference, LinuxConfiguration, SshConfiguration, SshPublicKey
 from azure.mgmt.network import NetworkManagementClient
-from azure.mgmt.network.models import NetworkSecurityGroup, SecurityRule, NetworkInterface, NetworkInterfaceIPConfiguration, PublicIPAddress, VirtualNetwork, Subnet, NetworkSecurityGroup
+from azure.mgmt.network.models import NetworkSecurityGroup, SecurityRule, NetworkInterface, NetworkInterfaceIPConfiguration, PublicIPAddress, VirtualNetwork, Subnet
 from azure.storage.blob import BlobServiceClient
-from azure.common.credentials import ServicePrincipalCredentials
-from azure.mgmt.compute.models import VirtualMachine, HardwareProfile, StorageProfile, OSProfile, NetworkProfile, ImageReference, LinuxConfiguration, SshConfiguration, SshPublicKey
 from azure.mgmt.storage import StorageManagementClient
 
 # Configure logging
@@ -211,24 +209,15 @@ def upload_to_azure(local_file_path, blob_name, container_name):
     except Exception as e:
         logger.error(f"Failed to upload {local_file_path} to {blob_name}: {e}")
 
-if __name__ == "__main__":
+def azure_vm_runner(base_dir, inputs, subscription_id):
 
-    # Load environment variables
-    load_dotenv('.env')
-
-    # Load configuration from YAML file
-    base_dir = os.getenv("BASE_DIR")
-    with open(os.path.join(base_dir, 'azure_inputs/az_run_on_vm.yaml'), 'r') as file:
-        config = yaml.safe_load(file)
-
-    subscription_id = os.getenv("subscription_id")
-    resource_group_name = config['azure']['resource_group_name']
-    location = config['azure']['location']
-    storage_account_name = config['azure']['storage_account_name']
-    container_name = config['azure']['container_name']
-    vm_name = config['azure']['vm_name']
-    admin_username = config['azure']['admin_username']
-    admin_password = config['azure']['admin_password']
+    resource_group_name = inputs['azure']['resource_group_name']
+    location = inputs['azure']['location']
+    storage_account_name = inputs['azure']['storage_account_name']
+    container_name = inputs['azure']['container_name']
+    vm_name = inputs['azure']['vm_name']
+    admin_username = inputs['azure']['admin_username']
+    admin_password = inputs['azure']['admin_password']
 
     # Authenticate with Azure
     credential = DefaultAzureCredential()
@@ -257,11 +246,25 @@ if __name__ == "__main__":
 
     # Create virtual machine
     create_vm(compute_client, nic.id, resource_group_name, vm_name, location, admin_username, admin_password)
-
+    
     # Upload script to VM and run simulation
     upload_script_to_vm(public_ip.ip_address, admin_username)
     run_simulation_on_vm(public_ip.ip_address, admin_username, storage_account_name, container_name)
 
     # Download results from VM and upload to Azure
     download_results_from_vm(public_ip.ip_address, admin_username)
-    upload_results_to_azure("simulation_outputs", container_name)
+    upload_results_to_azure("simulation_outputs", container_name)    
+
+if __name__ == "__main__":
+
+    # Load environment variables
+    load_dotenv('.env')
+
+    # Load configuration from YAML file
+    base_dir = os.getenv("BASE_DIR")
+    with open(os.path.join(base_dir, 'azure_inputs/az_run_on_vm.yaml'), 'r') as file:
+        inputs = yaml.safe_load(file)
+
+    subscription_id = os.getenv("subscription_id")
+
+    azure_vm_runner(base_dir, inputs, subscription_id)
