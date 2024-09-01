@@ -5,6 +5,11 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm
+from dotenv import load_dotenv
+from colorama import Fore, Style, init
+
+load_dotenv()
+
 
 def print_decorative_message(message):
     """
@@ -247,6 +252,51 @@ def save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, output_dir
     ani.save(os.path.join(output_dir, "flow_animation.mp4"), writer='ffmpeg')
     plt.close(fig)
 
+def moving_lid_sim_runner(inputs_yaml):
+    """
+    Run the moving lid simulation with the given input parameters.
+
+    Parameters:
+    inputs_yaml (dict): Input parameters for the simulation.
+
+    Returns:
+    None
+    """
+    nx = inputs_yaml['nx']
+    ny = inputs_yaml['ny']
+    nt = inputs_yaml['nt']
+    nit = inputs_yaml['nit']
+    Lx = inputs_yaml['Lx']
+    Ly = inputs_yaml['Ly']
+    dx = inputs_yaml['dx']
+    dy = inputs_yaml['dy']
+    rho = inputs_yaml['rho']
+    nu = inputs_yaml['nu']
+    dt = inputs_yaml['dt']
+    output_dir = os.path.join(os.getenv("BASE_DIR"), "simulation_outputs", inputs_yaml['output_dir'])
+
+    u = np.zeros((ny, nx))
+    v = np.zeros((ny, nx))
+    p = np.zeros((ny, nx))
+
+    u, v, p, cavity_flow_data = run_simulation(nt, u, v, dt, dx, dy, p, rho, nu, nit)
+    print_decorative_message(Fore.GREEN + "Simulation complete." + Style.RESET_ALL)
+    check_output_dir(output_dir)
+    print_decorative_message(Fore.GREEN + "Saving data and plotting results..." + Style.RESET_ALL)
+    save_data(cavity_flow_data, output_dir)
+    print_decorative_message(Fore.GREEN + "Data saved." + Style.RESET_ALL)
+    plot_results(p, u, v, Lx, Ly, nx, ny, output_dir)
+    print_decorative_message(Fore.GREEN + "Results plotted." + Style.RESET_ALL)
+    print_decorative_message(Fore.GREEN + "Saving animation..." + Style.RESET_ALL)
+    save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, output_dir)
+    print_decorative_message(Fore.GREEN + "Animation saved." + Style.RESET_ALL)
+
+    csv_file_path = os.path.join(output_dir, "flow_data.csv")
+    plot_file_path = os.path.join(output_dir, "flow_plot.png")
+    animation_file_path = os.path.join(output_dir, "flow_animation.mp4")
+
+    return csv_file_path, plot_file_path, animation_file_path
+
 if __name__ == "__main__":
     # Load environment variables from the .env file
     from dotenv import load_dotenv
@@ -265,31 +315,4 @@ if __name__ == "__main__":
         moving_lid_inputs = yaml.safe_load(file)
 
     # Parameters for running the simulation
-    nx = moving_lid_inputs['nx']
-    ny = moving_lid_inputs['ny']
-    nt = moving_lid_inputs['nt']
-    nit = moving_lid_inputs['nit']
-    Lx = moving_lid_inputs['Lx']
-    Ly = moving_lid_inputs['Ly']
-    dx = moving_lid_inputs['dx']
-    dy = moving_lid_inputs['dy']
-    rho = moving_lid_inputs['rho']
-    nu = moving_lid_inputs['nu']
-    dt = moving_lid_inputs['dt']
-    output_dir = os.path.join(BASE_DIR, "simulation_outputs", moving_lid_inputs['output_dir'])
-
-    u = np.zeros((ny, nx))
-    v = np.zeros((ny, nx))
-    p = np.zeros((ny, nx))
-
-    u, v, p, cavity_flow_data = run_simulation(nt, u, v, dt, dx, dy, p, rho, nu, nit)
-    print_decorative_message("Simulation complete.")
-    check_output_dir(output_dir)
-    print_decorative_message("Saving data and plotting results...")
-    save_data(cavity_flow_data, output_dir)
-    print_decorative_message("Data saved.")
-    plot_results(p, u, v, Lx, Ly, nx, ny, output_dir)
-    print_decorative_message("Results plotted.")
-    print_decorative_message("Saving animation...")
-    save_animation(u, v, p, Lx, Ly, nx, ny, dt, nt, cavity_flow_data, output_dir)
-    print_decorative_message("Animation saved.")
+    moving_lid_sim_runner(moving_lid_inputs)

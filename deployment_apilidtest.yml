@@ -1,0 +1,9 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+name: fastapi-cavity-lid-api-deployment
+endpoint_name: fastapi-cavity-lid-api-endpoint
+image: apilidtest.azurecr.io/fastapi-cavity-lid-api:v1
+compute: azureml:aci
+resources:
+  requests:
+    cpu: 1
+    memory: 1Gi
